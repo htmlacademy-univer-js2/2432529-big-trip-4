@@ -19,7 +19,7 @@ const Duration = {
   MIN: 59
 };
 
-//let date = dayjs().subtract(getRandomInteger(0, Duration.DAY), 'day').toDate();
+let date = dayjs().subtract(getRandomInteger(0, Duration.DAY), 'day').toDate();
 
 function getDate({ next }) {
   const minsGap = getRandomInteger(0, Duration.MIN);
@@ -48,16 +48,16 @@ function getRandomValue(items) {
   return items[getRandomInteger(0, items.length - 1)];
 }
 
-function formatStringToDateTime(date) {
-  return dayjs(date).format('DD/MM/YY HH:mm');
+function formatStringToDateTime(date_f) {
+  return dayjs(date_f).format('DD/MM/YY HH:mm');
 }
 
-function formatStringToShortDate(date) {
-  return dayjs(date).format('MMM DD');
+function formatStringToShortDate(date_f) {
+  return dayjs(date_f).format('MMM DD');
 }
 
-function formatStringToTime(date) {
-  return dayjs(date).format('HH:mm');
+function formatStringToTime(date_f) {
+  return dayjs(date_f).format('HH:mm');
 }
 
 function getPointDuration(dateFrom, dateTo) {

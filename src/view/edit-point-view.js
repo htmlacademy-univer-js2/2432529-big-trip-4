@@ -27,10 +27,10 @@ function createPointTypesTemplate(currentType) {
       </div>`).join('');
 }
 
-const createPointOffersTemplate = ({pointOffers}) => {
+function createPointOffersTemplate ({ pointOffers }) {
   const offerItems = pointOffers.map(offer => {
-      return (
-          `<div class="event__offer-selector">
+    return (
+      `<div class="event__offer-selector">
               <input class="event__offer-checkbox  visually-hidden" id="${offer.id}" type="checkbox" name="event-offer-luggage" checked>
               <label class="event__offer-label" for="${offer.id}">
                   <span class="event__offer-title">${offer.title}</span>
@@ -38,13 +38,13 @@ const createPointOffersTemplate = ({pointOffers}) => {
                   <span class="event__offer-price">${offer.price}</span>
               </label>
           </div>`
-      );
+    );
   }).join('');
 
   return `<div class="event__available-offers">${offerItems}</div>`;
-}
+};
 
-function createEditPointTemplate({point, pointDestination, pointOffers}) {
+function createEditPointTemplate({ point, pointDestination, pointOffers }) {
   const { basePrice, dateFrom, dateTo, type } = point;
   return (`
             <li class="trip-events__item">
