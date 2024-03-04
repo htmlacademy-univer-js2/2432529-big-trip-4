@@ -1,5 +1,5 @@
-import { getRandomValue, getRandomInteger } from "../utils.js";
-import { CITIES, DESCRIPTION } from "../const.js";
+import { getRandomValue, getRandomInteger } from '../utils.js';
+import { CITIES, DESCRIPTION } from '../const.js';
 
 function generateDestination () {
   const city = getRandomValue(CITIES);

@@ -1,8 +1,50 @@
 import { createElement } from '../render.js';
-import { POINT_EMPTY, TYPES, CITIES } from "../const.js";
+import { POINT_EMPTY, TYPES, CITIES } from '../const.js';
 import { formatStringToDateTime } from '../utils.js';
 
-function createEditPointTemplate() {
+function createPointCitiesOptionsTemplate() {
+  return (
+    `<datalist id="destination-list-1">
+          ${CITIES.map((city) => `<option value="${city}"></option>`).join('')}
+      </div>`
+  );
+}
+
+function createPointPhotosTemplate(pointDestination) {
+  return (
+    `<div class="event__photos-tape">
+          ${pointDestination.pictures.map((picture) =>
+      `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`).join('')}
+      </div>`
+  );
+}
+
+function createPointTypesTemplate(currentType) {
+  return TYPES.map((type) =>
+    `<div class="event__type-item">
+          <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}" ${currentType === type ? 'checked' : ''}>
+          <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${type}</label>
+      </div>`).join('');
+}
+
+function createPointOffersTemplate({ pointOffers }) {
+  const offerItems = pointOffers.map(function (offer) {
+    return (
+      `<div class="event__offer-selector">
+              <input class="event__offer-checkbox  visually-hidden" id="${offer.id}" type="checkbox" name="event-offer-luggage" checked>
+              <label class="event__offer-label" for="${offer.id}">
+                  <span class="event__offer-title">${offer.title}</span>
+                  &plus;&euro;&nbsp;
+                  <span class="event__offer-price">${offer.price}</span>
+              </label>
+          </div>`
+    );
+  }).join('');
+
+  return `<div class="event__available-offers">${offerItems}</div>`;
+}
+
+function createEditPointTemplate({point, pointDestination, pointOffers}) {
   const { basePrice, dateFrom, dateTo, offers, type } = point;
   return (`
             <li class="trip-events__item">
@@ -11,7 +53,7 @@ function createEditPointTemplate() {
                   <div class="event__type-wrapper">
                     <label class="event__type  event__type-btn" for="event-type-toggle-1">
                       <span class="visually-hidden">Choose event type</span>
-                      <img class="event__type-icon" width="17" height="17" src="img/icons/flight.png" alt="Event type icon">
+                      <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
                     </label>
                     <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 
@@ -69,54 +111,13 @@ function createEditPointTemplate() {
   `);
 }
 
-function createPointCitiesOptionsTemplate() {
-  return (
-    `<datalist id="destination-list-1">
-          ${CITIES.map((city) => `<option value="${city}"></option>`).join('')}
-      </div>`
-  );
-}
-
-function createPointPhotosTemplate(pointDestination) {
-  return (
-    `<div class="event__photos-tape">
-          ${pointDestination.pictures.map((picture) =>
-      `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`).join('')}
-      </div>`
-  );
-}
-
-function createPointTypesTemplate(currentType) {
-  return TYPES.map((type) =>
-    `<div class="event__type-item">
-          <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}" ${currentType === type ? 'checked' : ''}>
-          <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${type}</label>
-      </div>`).join('');
-}
-
-function createPointOffersTemplate({ pointOffers }) {
-  const offerItems = pointOffers.map(offer => {
-    return (
-      `<div class="event__offer-selector">
-              <input class="event__offer-checkbox  visually-hidden" id="${offer.id}" type="checkbox" name="event-offer-luggage" checked>
-              <label class="event__offer-label" for="${offer.id}">
-                  <span class="event__offer-title">${offer.title}</span>
-                  &plus;&euro;&nbsp;
-                  <span class="event__offer-price">${offer.price}</span>
-              </label>
-          </div>`
-    );
-  }).join('');
-
-  return `<div class="event__available-offers">${offerItems}</div>`;
-}
-
 export default class EditPointView {
   constructor({ point = POINT_EMPTY, pointDestination, pointOffers }) {
     this.point = point;
     this.pointDestination = pointDestination;
     this.pointOffers = pointOffers;
   }
+
   getTemplate() {
     return createEditPointTemplate({
       point: this.point,
