@@ -2,7 +2,7 @@ import { createElement } from '../render.js';
 import { formatStringToDateTime, formatStringToShortDate, formatStringToTime, getPointDuration } from '../utils.js';
 
 function createPointOffersTemplate({ pointOffers }) {
-  const offerItems = pointOffers.map(offer => {
+  const offerItems = pointOffers.map((offer) => {
     return (
       `<li class="event__offer">
               <span class="event__offer-title">${offer.title}</span>
@@ -13,7 +13,7 @@ function createPointOffersTemplate({ pointOffers }) {
   }).join('');
 
   return `<ul class="event__selected-offers">${offerItems}</ul>`;
-};
+}
 
 function createPointTemplate({ point, pointDestination, pointOffers }) {
   const { basePrice, dateFrom, dateTo, isFavorite, type } = point;

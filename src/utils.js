@@ -48,16 +48,16 @@ function getRandomValue(items) {
   return items[getRandomInteger(0, items.length - 1)];
 }
 
-function formatStringToDateTime(date_f) {
-  return dayjs(date_f).format('DD/MM/YY HH:mm');
+function formatStringToDateTime(dateF) {
+  return dayjs(dateF).format('DD/MM/YY HH:mm');
 }
 
-function formatStringToShortDate(date_f) {
-  return dayjs(date_f).format('MMM DD');
+function formatStringToShortDate(dateF) {
+  return dayjs(dateF).format('MMM DD');
 }
 
-function formatStringToTime(date_f) {
-  return dayjs(date_f).format('HH:mm');
+function formatStringToTime(dateF) {
+  return dayjs(dateF).format('HH:mm');
 }
 
 function getPointDuration(dateFrom, dateTo) {
