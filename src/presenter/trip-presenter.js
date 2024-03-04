@@ -8,15 +8,34 @@ export default class TripPresenter {
   constructor(tripContainer) {
     this.tripContainer = tripContainer;
     this.pointList = new TripView();
+    this.destinationsModel = destinationsModel;
+    this.offersModel = offersModel;
+    this.pointsModel = pointsModel;
+    this.points = [...pointsModel.get()];
   }
 
   init() {
     render(new SortView(), this.tripContainer);
     render(this.pointList, this.tripContainer);
-    render(new EditPointView(), this.pointList.getElement());
+    render(
+      new EditPointView({
+        point: this.points[0],
+        pointDestination: this.destinationsModel.getById(this.points[0].destination),
+        pointOffers: this.offersModel.getByType(this.points[0].type),
+      }),
+      this.pointList.getElement()
+    );
 
-    for (let i = 0; i < 3; i++) {
-      render(new PointView(), this.pointList.getElement());
+    for (let i = 1; i < this.points.length; i++) {
+      const point = this.points[i];
+      render(
+        new PointView({
+          point,
+          pointDestination: this.destinationsModel.getById(point.destination),
+          pointOffers: this.offersModel.getByType(point.type)
+        }),
+        this.pointList.getElement()
+      );
     }
   }
 }
