@@ -12,7 +12,7 @@ export default class TripPresenter {
     this.offersModel = offersModel;
     this.pointsModel = pointsModel;
     this.points = [...pointsModel.get()];
-}
+  }
 
   init() {
     render(new SortView(), this.tripContainer);

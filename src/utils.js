@@ -19,7 +19,7 @@ const Duration = {
   MIN: 59
 };
 
-let date = dayjs().subtract(getRandomInteger(0, Duration.DAY), 'day').toDate();
+//let date = dayjs().subtract(getRandomInteger(0, Duration.DAY), 'day').toDate();
 
 function getDate({ next }) {
   const minsGap = getRandomInteger(0, Duration.MIN);
@@ -88,4 +88,4 @@ export {
   formatStringToShortDate,
   formatStringToTime,
   getPointDuration
-}
+};
