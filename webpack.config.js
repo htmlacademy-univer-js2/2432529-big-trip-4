@@ -12,17 +12,17 @@ module.exports = {
   devtool: 'source-map',
   plugins: [
     new HtmlPlugin({
-        template: 'public/index.html',
+      template: 'public/index.html',
     }),
     new CopyPlugin({
-        patterns: [
-            {
-              from: 'public',
-              globOptions: {
-                ignore: ['**/index.html'],
-              },
-            },
-        ],
+      patterns: [
+        {
+          from: 'public',
+          globOptions: {
+            ignore: ['**/index.html'],
+          },
+        },
+      ],
     }),
   ],
   module: {
@@ -36,6 +36,10 @@ module.exports = {
             presets: ['@babel/preset-env']
           },
         },
+      },
+      {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader']
       },
     ]
   }

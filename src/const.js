@@ -70,4 +70,4 @@ export {
   TYPES,
   DEFAULT_TYPE,
   POINT_EMPTY
-};
+}
