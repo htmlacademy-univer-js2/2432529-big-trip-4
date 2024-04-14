@@ -13,7 +13,7 @@ const createPointOffersTemplate = ({ pointOffers }) => {
   }).join('');
 
   return `<ul class="event__selected-offers">${offerItems}</ul>`;
-}
+};
 
 const createPointTemplate = ({ point, pointDestination, pointOffers }) => {
   const { basePrice, dateFrom, dateTo, offers, isFavorite, type } = point;
@@ -52,7 +52,7 @@ const createPointTemplate = ({ point, pointDestination, pointOffers }) => {
             </div>
         </li>`
   );
-}
+};
 
 export default class PointView extends AbstractView {
   #point = null;
@@ -81,5 +81,5 @@ export default class PointView extends AbstractView {
   #editClickHandler = (evt) => {
     evt.preventDefault();
     this.#onEditClick();
-  }
+  };
 }

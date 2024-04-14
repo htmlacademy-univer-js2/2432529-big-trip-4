@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { POINT_EMPTY, TYPES, CITIES } from "../const.js";
+import { POINT_EMPTY, TYPES, CITIES } from '../const.js';
 import { formatStringToDateTime } from '../utils.js';
 
 const createPointCitiesOptionsTemplate = () => {
@@ -8,7 +8,7 @@ const createPointCitiesOptionsTemplate = () => {
             ${CITIES.map((city) => `<option value="${city}"></option>`).join('')}
         </div>`
   );
-}
+};
 
 const createPointPhotosTemplate = (pointDestination) => {
   return (
@@ -17,7 +17,7 @@ const createPointPhotosTemplate = (pointDestination) => {
       `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`).join('')}
         </div>`
   );
-}
+};
 
 const createPointTypesTemplate = (currentType) => {
   return TYPES.map((type) =>
@@ -25,7 +25,7 @@ const createPointTypesTemplate = (currentType) => {
             <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}" ${currentType === type ? 'checked' : ''}>
             <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${type}</label>
         </div>`).join('');
-}
+};
 
 const createPointOffersTemplate = ({ pointOffers }) => {
   const offerItems = pointOffers.map(offer => {
@@ -42,7 +42,7 @@ const createPointOffersTemplate = ({ pointOffers }) => {
   }).join('');
 
   return `<div class="event__available-offers">${offerItems}</div>`;
-}
+};
 
 const createEditPointTemplate = ({ point, pointDestination, pointOffers }) => {
   const { basePrice, dateFrom, dateTo, offers, type } = point;
@@ -107,7 +107,7 @@ const createEditPointTemplate = ({ point, pointDestination, pointOffers }) => {
             </form>
         </li>`
   );
-}
+};
 
 export default class EditPointView extends AbstractView {
   #point = null;
@@ -140,10 +140,10 @@ export default class EditPointView extends AbstractView {
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
     this.#onSubmitClick();
-  }
+  };
 
   #resetButtonClickHandler = (evt) => {
     evt.preventDefault();
     this.#onResetClick();
-  }
+  };
 }

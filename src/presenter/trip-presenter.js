@@ -66,18 +66,18 @@ export default class TripPresenter {
     function pointEditClickHandler() {
       replacePointToForm();
       document.addEventListener('keydown', escKeyDownHandler);
-    };
+    }
 
     function resetButtonClickHandler() {
       replaceFormToPoint();
       document.removeEventListener('keydown', escKeyDownHandler);
-    };
+    }
 
     function pointSubmitHandler() {
       replaceFormToPoint();
       document.removeEventListener('keydown', escKeyDownHandler);
-    };
+    }
 
     render(pointComponent, this.#pointListComponent.element);
-  }
+  };
 }
