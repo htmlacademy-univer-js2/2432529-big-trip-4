@@ -9,11 +9,11 @@ const createFilterItemsTemplate = ({ filters }) => {
             ${(filter.hasPoints) ? '' : 'disabled'}>
           <label class="trip-filters__filter-label" for="filter-${filter.type}">${capitalize(filter.type)}</label>
         </div>`
-    )
+    );
   }).join('');
 
   return filterItems;
-}
+};
 
 const createFilterTemplate = ({ filters }) => {
   return (
@@ -22,7 +22,7 @@ const createFilterTemplate = ({ filters }) => {
         <button class="visually-hidden" type="submit">Accept filter</button>
       </form>`
   );
-}
+};
 
 export default class FilterView extends AbstractView {
   #filters = [];

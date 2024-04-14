@@ -64,7 +64,7 @@ const FilterType = {
   FUTURE: 'future',
   PRESENT: 'present',
   PAST: 'past'
-}
+};
 
 export {
   OFFER_COUNT,
@@ -78,4 +78,4 @@ export {
   DEFAULT_TYPE,
   POINT_EMPTY,
   FilterType
-}
+};

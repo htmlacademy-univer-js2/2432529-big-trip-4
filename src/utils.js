@@ -10,7 +10,7 @@ const TimePeriods = {
   SEC_IN_MIN: 60,
   MIN_IN_HOUR: 60,
   HOUR_IN_DAY: 24
-}
+};
 
 const MSEC_IN_HOUR = TimePeriods.MIN_IN_HOUR * TimePeriods.SEC_IN_MIN * TimePeriods.MSEC_IN_SEC;
 const MSEC_IN_DAY = TimePeriods.HOUR_IN_DAY * MSEC_IN_HOUR;
@@ -110,4 +110,4 @@ export {
   isPointFuture,
   isPointPast,
   isPointPresent
-}
+};
