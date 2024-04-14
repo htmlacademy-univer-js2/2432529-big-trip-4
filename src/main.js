@@ -16,7 +16,7 @@ const destinationsModel = new DestinationsModel(mockService);
 const offersModel = new OffersModel(mockService);
 const pointsModel = new PointsModel(mockService);
 
-const tripPresenter = new TripPresenter({tripContainer: eventListElement, destinationsModel, offersModel, pointsModel});
+const tripPresenter = new TripPresenter({ tripContainer: eventListElement, destinationsModel, offersModel, pointsModel });
 
 render(new TripInfoView(), tripInfoElement, RenderPosition.AFTERBEGIN);
 render(new FilterView(), tripInfoElement.querySelector('.trip-controls__filters'));
