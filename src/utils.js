@@ -10,7 +10,7 @@ const TimePeriods = {
   SEC_IN_MIN: 60,
   MIN_IN_HOUR: 60,
   HOUR_IN_DAY: 24
-}
+};
 
 const MSEC_IN_HOUR = TimePeriods.MIN_IN_HOUR * TimePeriods.SEC_IN_MIN * TimePeriods.MSEC_IN_SEC;
 const MSEC_IN_DAY = TimePeriods.HOUR_IN_DAY * MSEC_IN_HOUR;
@@ -62,6 +62,10 @@ function formatStringToTime(date) {
   return dayjs(date).format('HH:mm');
 }
 
+function capitalize(string) {
+  return `${string[0].toUpperCase()}${string.slice(1)}`;
+}
+
 function getPointDuration(dateFrom, dateTo) {
   const timeDiff = dayjs(dateTo).diff(dayjs(dateFrom));
 
@@ -82,6 +86,18 @@ function getPointDuration(dateFrom, dateTo) {
   return pointDuration;
 }
 
+function isPointFuture(point) {
+  return dayjs().isBefore(point.dateFrom);
+}
+
+function isPointPresent(point) {
+  return (dayjs().isAfter(point.dateFrom) && dayjs().isBefore(point.dateTo));
+}
+
+function isPointPast(point) {
+  return dayjs().isAfter(point.dateTo);
+}
+
 export {
   getDate,
   getRandomInteger,
@@ -89,5 +105,9 @@ export {
   formatStringToDateTime,
   formatStringToShortDate,
   formatStringToTime,
-  getPointDuration
-}
+  capitalize,
+  getPointDuration,
+  isPointFuture,
+  isPointPast,
+  isPointPresent
+};

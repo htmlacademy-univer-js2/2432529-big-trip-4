@@ -2,6 +2,7 @@ import SortView from '../view/sort-view.js';
 import EditPointView from '../view/edit-point-view.js';
 import PointView from '../view/point-view.js';
 import TripView from '../view/point-list-view.js';
+import EmptyListView from '../view/empty-list-view.js';
 import { render, replace } from '../framework/render.js';
 
 export default class TripPresenter {
@@ -23,6 +24,11 @@ export default class TripPresenter {
   }
 
   init() {
+    if (this.#points.length === 0) {
+      render(new EmptyListView(), this.#tripContainer);
+      return;
+    }
+
     render(this.#sortComponent, this.#tripContainer);
     render(this.#pointListComponent, this.#tripContainer);
 
