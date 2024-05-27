@@ -1,26 +1,26 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { formatStringToDateTime, formatStringToShortDate, formatStringToTime, getPointDuration} from '../utils.js';
+import { formatStringToDateTime, formatStringToShortDate, formatStringToTime, getPointDuration } from '../utils.js';
 
-const createPointOffersTemplate = ({pointOffers}) => {
-    const offerItems = pointOffers.map(offer => {
-        return (
-            `<li class="event__offer">
+const createPointOffersTemplate = ({ pointOffers }) => {
+  const offerItems = pointOffers.map(offer => {
+    return (
+      `<li class="event__offer">
                 <span class="event__offer-title">${offer.title}</span>
                 &plus;&euro;&nbsp;
                 <span class="event__offer-price">${offer.price}</span>
             </li>`
-        );
-    }).join('');
+    );
+  }).join('');
 
-    return `<ul class="event__selected-offers">${offerItems}</ul>`;
+  return `<ul class="event__selected-offers">${offerItems}</ul>`;
 }
 
-const createPointTemplate = ({point, pointDestination, pointOffers}) => {
-    const { basePrice, dateFrom, dateTo, offers, isFavorite, type } = point;
-    const favoriteClassName = isFavorite ? 'event__favorite-btn--active' : '';
+const createPointTemplate = ({ point, pointDestination, pointOffers }) => {
+  const { basePrice, dateFrom, dateTo, offers, isFavorite, type } = point;
+  const favoriteClassName = isFavorite ? 'event__favorite-btn--active' : '';
 
-    return (
-        `<li class="trip-events__item">
+  return (
+    `<li class="trip-events__item">
             <div class="event">
             <time class="event__date" datetime=${formatStringToDateTime(dateFrom)}>${formatStringToShortDate(dateFrom)}</time>
             <div class="event__type">
@@ -39,7 +39,7 @@ const createPointTemplate = ({point, pointDestination, pointOffers}) => {
                 &euro;&nbsp;<span class="event__price-value">${basePrice}</span>
             </p>
             <h4 class="visually-hidden">Offers:</h4>
-            ${createPointOffersTemplate({pointOffers})}
+            ${createPointOffersTemplate({ pointOffers })}
             <button class="event__favorite-btn ${favoriteClassName}" type="button">
                 <span class="visually-hidden">Add to favorite</span>
                 <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
@@ -51,43 +51,43 @@ const createPointTemplate = ({point, pointDestination, pointOffers}) => {
             </button>
             </div>
         </li>`
-    );
+  );
 }
 
 export default class PointView extends AbstractView {
-    #point = null;
-    #pointDestination = null;
-    #pointOffers = null;
-    #onEditClick = null;
-    #onFavoriteClick = null;
+  #point = null;
+  #pointDestination = null;
+  #pointOffers = null;
+  #onEditClick = null;
+  #onFavoriteClick = null;
 
-    constructor({point, pointDestination, pointOffers, onEditClick, onFavoriteClick}) {
-        super();
-        this.#point = point;
-        this.#pointDestination = pointDestination;
-        this.#pointOffers = pointOffers;
-        this.#onEditClick = onEditClick;
-        this.#onFavoriteClick = onFavoriteClick;
+  constructor({ point, pointDestination, pointOffers, onEditClick, onFavoriteClick }) {
+    super();
+    this.#point = point;
+    this.#pointDestination = pointDestination;
+    this.#pointOffers = pointOffers;
+    this.#onEditClick = onEditClick;
+    this.#onFavoriteClick = onFavoriteClick;
 
-        this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
-        this.element.querySelector('.event__favorite-icon').addEventListener('click', this.#favoriteClickHandler);
-    }
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
+    this.element.querySelector('.event__favorite-icon').addEventListener('click', this.#favoriteClickHandler);
+  }
 
-    get template() {
-        return createPointTemplate({
-            point: this.#point,
-            pointDestination: this.#pointDestination,
-            pointOffers: this.#pointOffers
-        });
-    }
+  get template() {
+    return createPointTemplate({
+      point: this.#point,
+      pointDestination: this.#pointDestination,
+      pointOffers: this.#pointOffers
+    });
+  }
 
-    #editClickHandler = (evt) => {
-        evt.preventDefault();
-        this.#onEditClick();
-    }
+  #editClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#onEditClick();
+  }
 
-    #favoriteClickHandler = (evt) => {
-        evt.preventDefault();
-        this.#onFavoriteClick();
-    }
+  #favoriteClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#onFavoriteClick();
+  }
 }

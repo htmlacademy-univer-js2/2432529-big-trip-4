@@ -18,79 +18,79 @@ const CITIES = [
 ];
 
 const OFFERS = [
-    'Order Uber',
-    'Add luggage',
-    'Switch to comfort',
-    'Rent a car',
-    'Add breakfast',
-    'Book tickets',
-    'Lunch in city',
-    'Upgrade to a business class'
+  'Order Uber',
+  'Add luggage',
+  'Switch to comfort',
+  'Rent a car',
+  'Add breakfast',
+  'Book tickets',
+  'Lunch in city',
+  'Upgrade to a business class'
 ];
 
 const DESCRIPTION = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra.';
 
 const Price = {
-    MIN: 1,
-    MAX: 1000
+  MIN: 1,
+  MAX: 1000
 };
 
 const TYPES = [
-    'taxi',
-    'bus',
-    'train',
-    'ship',
-    'drive',
-    'flight',
-    'check-in',
-    'sightseeing',
-    'restaurant'
+  'taxi',
+  'bus',
+  'train',
+  'ship',
+  'drive',
+  'flight',
+  'check-in',
+  'sightseeing',
+  'restaurant'
 ];
 
 const DEFAULT_TYPE = 'flight';
 
 const POINT_EMPTY = {
-    basePrice: 0,
-    dateFrom: null,
-    dateTo: null,
-    destination: null,
-    isFavorite: false,
-    offers: [],
-    type: DEFAULT_TYPE
+  basePrice: 0,
+  dateFrom: null,
+  dateTo: null,
+  destination: null,
+  isFavorite: false,
+  offers: [],
+  type: DEFAULT_TYPE
 };
 
 const FilterType = {
-    EVERYTHING: 'everything',
-    FUTURE: 'future',
-    PRESENT: 'present',
-    PAST: 'past'
+  EVERYTHING: 'everything',
+  FUTURE: 'future',
+  PRESENT: 'present',
+  PAST: 'past'
 }
 
 const Mode = {
-    DEFAULT: 'default',
-    EDITING: 'editing',
+  DEFAULT: 'default',
+  EDITING: 'editing',
 };
 
 const SortType = {
-    DAY: 'day',
-    EVENT: 'event',
-    TIME: 'time',
-    PRICE: 'price',
-    OFFERS: 'offers'
+  DAY: 'day',
+  EVENT: 'event',
+  TIME: 'time',
+  PRICE: 'price',
+  OFFERS: 'offers'
 };
 
 export {
-    OFFER_COUNT,
-    DESTINATION_COUNT,
-    POINT_COUNT,
-    CITIES,
-    OFFERS,
-    DESCRIPTION,
-    Price,
-    TYPES,
-    DEFAULT_TYPE,
-    POINT_EMPTY,
-    FilterType,
-    Mode,
-    SortType
+  OFFER_COUNT,
+  DESTINATION_COUNT,
+  POINT_COUNT,
+  CITIES,
+  OFFERS,
+  DESCRIPTION,
+  Price,
+  TYPES,
+  DEFAULT_TYPE,
+  POINT_EMPTY,
+  FilterType,
+  Mode,
+  SortType
 }
