@@ -64,6 +64,19 @@ const FilterType = {
   FUTURE: 'future',
   PRESENT: 'present',
   PAST: 'past'
+}
+
+const Mode = {
+  DEFAULT: 'default',
+  EDITING: 'editing',
+};
+
+const SortType = {
+  DAY: 'day',
+  EVENT: 'event',
+  TIME: 'time',
+  PRICE: 'price',
+  OFFERS: 'offers'
 };
 
 export {
@@ -77,5 +90,7 @@ export {
   TYPES,
   DEFAULT_TYPE,
   POINT_EMPTY,
-  FilterType
-};
+  FilterType,
+  Mode,
+  SortType
+}
