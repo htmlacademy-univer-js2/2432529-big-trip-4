@@ -1,8 +1,10 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import { formatStringToDateTime, formatStringToShortDate, formatStringToTime, getPointDuration } from '../utils.js';
 
-const createPointOffersTemplate = ({ pointOffers }) => {
-  const selectedOffers = pointOffers.filter((offer) => offer.included);
+const createPointOffersTemplate = ({ offersId, pointOffers }) => {
+
+  const selectedOffers = pointOffers.filter((offer) => offersId.includes(offer.id));
+  console.log(selectedOffers)
 
   if (selectedOffers.length === 0) {
     return '';
@@ -45,7 +47,7 @@ const createPointTemplate = ({ point, pointDestination, pointOffers }) => {
                 &euro;&nbsp;<span class="event__price-value">${basePrice}</span>
             </p>
             <h4 class="visually-hidden">Offers:</h4>
-            ${createPointOffersTemplate({ pointOffers })}
+            ${createPointOffersTemplate({ offersId: point.offers, pointOffers })}
             <button class="event__favorite-btn ${favoriteClassName}" type="button">
                 <span class="visually-hidden">Add to favorite</span>
                 <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
