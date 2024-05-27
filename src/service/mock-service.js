@@ -36,19 +36,10 @@ export default class MockService {
   }
 
   generateOffers() {
-    return TYPES.map((type) => {
-      const offers = Array.from({ length: getRandomInteger(0, OFFER_COUNT) }, () => generateOffer(type));
-
-      const offersWithRandomSelection = offers.map((offer, index) => ({
-        ...offer,
-        included: index < getRandomInteger(0, offers.length - 1)
-      }));
-
-      return {
-        type,
-        offers: offersWithRandomSelection
-      };
-    });
+    return TYPES.map((type) => ({
+      type,
+      offers: Array.from({ length: getRandomInteger(0, OFFER_COUNT) }, () => generateOffer(type))
+    }));
   }
 
   generatePoints() {
