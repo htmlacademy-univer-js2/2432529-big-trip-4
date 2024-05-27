@@ -20,29 +20,6 @@ export default class MockService {
     return this.destinations;
   }
 
-  generateOffers() {
-    return TYPES.map((type) => ({
-      type,
-      offers: Array.from({ length: getRandomInteger(0, OFFER_COUNT) }, () => generateOffer(type))
-    }));
-  }
-
-  generatePoints() {
-    return Array.from({ length: POINT_COUNT }, () => {
-      const type = getRandomValue(TYPES);
-      const destination = getRandomValue(this.destinations);
-      const hasOffers = getRandomInteger(0, 1);
-      const offersByType = this.offers.find((offerByType) => offerByType.type === type);
-      const offerIds = (hasOffers)
-        ? offersByType.offers
-          .slice(0, getRandomInteger(0, OFFER_COUNT))
-          .map((offer) => offer.id)
-        : [];
-
-      return generatePoint(type, destination.id, offerIds);
-    });
-  }
-
   getOffers() {
     return this.offers;
   }
@@ -56,5 +33,39 @@ export default class MockService {
       { length: DESTINATION_COUNT },
       () => generateDestination()
     );
+  }
+
+  generateOffers() {
+    return TYPES.map((type) => {
+      const offers = Array.from({ length: getRandomInteger(0, OFFER_COUNT) }, () => generateOffer(type));
+
+      const offersWithRandomSelection = offers.map((offer, index) => ({
+        ...offer,
+        included: index < getRandomInteger(0, offers.length - 1)
+      }));
+
+      return {
+        type,
+        offers: offersWithRandomSelection
+      };
+    });
+  }
+
+  generatePoints() {
+    return Array.from({ length: POINT_COUNT }, () => {
+      const type = getRandomValue(TYPES);
+      const destination = getRandomValue(this.destinations);
+      const hasOffers = getRandomInteger(0, 1);
+      const offersByType = this.offers
+        .find((offerByType) => offerByType.type === type);
+
+      const offerIds = (hasOffers)
+        ? offersByType.offers
+          .slice(0, getRandomInteger(0, OFFER_COUNT))
+          .map((offer) => offer.id)
+        : [];
+
+      return generatePoint(type, destination.id, offerIds);
+    });
   }
 }
