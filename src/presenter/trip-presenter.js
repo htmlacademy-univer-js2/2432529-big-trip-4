@@ -4,7 +4,7 @@ import EmptyListView from '../view/empty-list-view.js';
 import PointPresenter from './point-presenter.js';
 import { render, replace, remove } from '../framework/render.js';
 import { updateItem } from '../utils.js';
-import { SortType, EnabledSortType } from '../const.js';
+import { SortType } from '../const.js';
 import { sort } from '../utils/sort.js';
 import PointListView from '../view/point-list-view.js';
 

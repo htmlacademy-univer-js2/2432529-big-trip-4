@@ -1,5 +1,5 @@
 const OFFER_COUNT = 5;
-const DESTINATION_COUNT = 5;
+
 const POINT_COUNT = 5;
 
 const CITIES = [
@@ -14,8 +14,10 @@ const CITIES = [
   'Saint Petersburg',
   'Moscow',
   'Sochi',
-  'Tokio',
+  'Tokyo',
 ];
+
+const DESTINATION_COUNT = CITIES.length;
 
 const OFFERS = [
   'Order Uber',

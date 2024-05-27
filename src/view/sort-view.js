@@ -42,7 +42,7 @@ export default class SortView extends AbstractView {
 
     this.#items = Object.values(SortType).map((type) => ({
       type,
-      isChecked: (type === sortType),
+      isChecked: type === sortType,
       isDisabled: !EnabledSortType[type]
     }));
 
