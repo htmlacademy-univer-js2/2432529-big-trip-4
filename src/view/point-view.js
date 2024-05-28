@@ -2,9 +2,7 @@ import AbstractView from '../framework/view/abstract-view.js';
 import { formatStringToDateTime, formatStringToShortDate, formatStringToTime, getPointDuration } from '../utils.js';
 
 const createPointOffersTemplate = ({ offersId, pointOffers }) => {
-
   const selectedOffers = pointOffers.filter((offer) => offersId.includes(offer.id));
-  console.log(selectedOffers)
 
   if (selectedOffers.length === 0) {
     return '';
