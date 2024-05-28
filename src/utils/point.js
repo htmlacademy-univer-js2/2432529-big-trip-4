@@ -18,7 +18,7 @@ function adaptToClient(point) {
 function adaptToServer(point) {
   const adaptedPoint = {
     ...point,
-    ['base_price']: point.basePrice,
+    ['base_price']: Number(point.basePrice),
     ['date_from']: new Date(point.dateFrom).toISOString(),
     ['date_to']: new Date(point.dateTo).toISOString(),
     ['is_favorite']: point.isFavorite

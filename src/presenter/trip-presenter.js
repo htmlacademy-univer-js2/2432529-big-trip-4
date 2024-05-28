@@ -5,9 +5,10 @@ import LoadingView from '../view/loading-view.js';
 import PointPresenter from './point-presenter.js';
 import NewPointPresenter from './new-point-presenter.js';
 import { render, replace, remove, RenderPosition } from '../framework/render.js';
-import { SortType, EnabledSortType, UserAction, UpdateType, FilterType } from '../const.js';
+import { SortType, EnabledSortType, UserAction, UpdateType, FilterType, TimeLimit } from '../const.js';
 import { sort } from '../utils/sort.js';
 import { filter } from '../utils/filter.js';
+import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
 
 export default class TripPresenter {
   #tripContainer = null;
@@ -16,6 +17,10 @@ export default class TripPresenter {
   #sortComponent = null;
   #messageComponent = null;
   #loadingComponent = new LoadingView();
+  #uiBlocker = new UiBlocker({
+    lowerLimit: TimeLimit.LOWER_LIMIT,
+    upperLimit: TimeLimit.UPPER_LIMIT
+  });
 
   #destinationsModel = null;
   #offersModel = null;
@@ -43,7 +48,7 @@ export default class TripPresenter {
       container: this.#pointListComponent.element,
       destinationsModel: this.#destinationsModel,
       offersModel: this.#offersModel,
-      onDataChange: this.#pointChangeHandler,
+      onDataChange: this.#viewActionHandler,
       onDestroy: this.#newPointDestroyHandler
     });
 
@@ -75,7 +80,7 @@ export default class TripPresenter {
       container: this.#pointListComponent.element,
       destinationsModel: this.#destinationsModel,
       offersModel: this.#offersModel,
-      onDataChange: this.#pointChangeHandler,
+      onDataChange: this.#viewActionHandler,
       onModeChange: this.#modeChangeHandler
     });
 
@@ -138,8 +143,11 @@ export default class TripPresenter {
   #renderBoard = () => {
     if (this.#isLoading) {
       this.#renderLoading();
+      this.#newPointButtonPresenter.disableButton();
       return;
     }
+
+    this.#newPointButtonPresenter.enableButton();
 
     if (this.#isLoadingError) {
       this.#clearBoard({ resetSortType: true });
@@ -170,18 +178,35 @@ export default class TripPresenter {
     }
   }
 
-  #pointChangeHandler = (actionType, updateType, update) => {
+  #viewActionHandler = async (actionType, updateType, update) => {
+    this.#uiBlocker.block();
     switch (actionType) {
       case UserAction.UPDATE_POINT:
-        this.#pointsModel.update(updateType, update);
+        this.#pointPresenters.get(update.id).setSaving();
+        try {
+          await this.#pointsModel.update(updateType, update);
+        } catch {
+          this.#pointPresenters.get(update.id).setAborting();
+        }
         break;
       case UserAction.DELETE_POINT:
-        this.#pointsModel.delete(updateType, update);
+        this.#pointPresenters.get(update.id).setDeleting();
+        try {
+          await this.#pointsModel.delete(updateType, update);
+        } catch {
+          this.#pointPresenters.get(update.id).setAborting();
+        }
         break;
       case UserAction.ADD_POINT:
-        this.#pointsModel.add(updateType, update);
+        this.#newPointPresenter.setSaving();
+        try {
+          await this.#pointsModel.add(updateType, update);
+        } catch {
+          this.#newPointPresenter.setAborting();
+        }
         break;
     }
+    this.#uiBlocker.unblock();
   };
 
   #modelEventHandler = (updateType, data) => {

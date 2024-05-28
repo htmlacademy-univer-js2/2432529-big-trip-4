@@ -8,36 +8,42 @@ import he from 'he';
 const ButtonLabel = {
   CANCEL_DEFAULT: 'Cancel',
   DELETE_DEFAULT: 'Delete',
-  SAVE_DEFAULT: 'Save'
+  DELETE_IN_PROGRESS: 'Deleting...',
+  SAVE_DEFAULT: 'Save',
+  SAVE_IN_PROGRESS: 'Saving...'
 }
 
-const createSaveButtonTemplate = () => {
-  const label = ButtonLabel.SAVE_DEFAULT;
-  return `<button class="event__save-btn btn btn--blue" type="submit">${label}</button>`;
+const createSaveButtonTemplate = ({ isSaving, isDisabled }) => {
+  const label = isSaving ? ButtonLabel.SAVE_IN_PROGRESS : ButtonLabel.SAVE_DEFAULT;
+  return `<button class="event__save-btn btn btn--blue" type="submit" ${(isDisabled) ? 'disabled' : ''}>${label}</button>`;
 }
 
-const createResetButtonTemplate = ({ pointType }) => {
-  const label = pointType === EditType.CREATING
-    ? ButtonLabel.CANCEL_DEFAULT
-    : ButtonLabel.DELETE_DEFAULT;
-  return `<button class="event__reset-btn" type="reset">${label}</button>`;
+const createResetButtonTemplate = ({ pointType, isDeleting, isDisabled }) => {
+  let label;
+
+  if (pointType === EditType.CREATING) {
+    label = ButtonLabel.CANCEL_DEFAULT;
+  } else {
+    label = isDeleting ? ButtonLabel.DELETE_IN_PROGRESS : ButtonLabel.DELETE_DEFAULT;
+  }
+  return `<button class="event__reset-btn" type="reset" ${(isDisabled) ? 'disabled' : ''}>${label}</button>`;
 }
 
-const createRollupButtonTemplate = () => {
-  return `<button class="event__rollup-btn" type="button"><span class="visually-hidden">Open event</span></button>`
+const createRollupButtonTemplate = (isDisabled) => {
+  return `<button class="event__rollup-btn" type="button"><span class="visually-hidden" ${(isDisabled) ? 'disabled' : ''}>Open event</span></button>`
 }
 
-const createPointEditControlsTemplate = ({ pointType }) => {
+const createPointEditControlsTemplate = ({ pointType, isSaving, isDeleting, isDisabled }) => {
   return `
-        ${createSaveButtonTemplate()}
-        ${createResetButtonTemplate({ pointType })}
-        ${(pointType === EditType.EDITING) ? createRollupButtonTemplate() : ''}
+        ${createSaveButtonTemplate({ isSaving, isDisabled })}
+        ${createResetButtonTemplate({ pointType, isDeleting, isDisabled })}
+        ${(pointType === EditType.EDITING) ? createRollupButtonTemplate(isDisabled) : ''}
     `;
 }
 
-const createPointCitiesOptionsTemplate = () => {
+const createPointCitiesOptionsTemplate = (isDisabled) => {
   return (
-    `<datalist id="destination-list-1">
+    `<datalist id="destination-list-1" ${(isDisabled) ? 'disabled' : ''}>
             ${CITIES.map((city) => `<option value="${city}"></option>`).join('')}
         </div>`
   );
@@ -52,10 +58,10 @@ const createPointPhotosTemplate = (pointDestination) => {
   );
 }
 
-const createPointTypesTemplate = (currentType) => {
+const createPointTypesTemplate = ({ currentType, isDisabled }) => {
   return TYPES.map((type) =>
     `<div class="event__type-item">
-            <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}" ${currentType === type ? 'checked' : ''}>
+            <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}" ${currentType === type ? 'checked' : ''} ${(isDisabled) ? 'disabled' : ''}>
             <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${type}</label>
         </div>`).join('');
 }
@@ -79,7 +85,7 @@ const createPointOffersTemplate = ({ offersId, currentOffers }) => {
 }
 
 const createEditPointTemplate = ({ state, pointDestination, pointOffers, pointType }) => {
-  const { point } = state;
+  const { point, isDisabled, isSaving, isDeleting } = state;
   const { basePrice, dateFrom, dateTo, type } = point;
 
   const currentDestination = pointDestination.find((destination) => destination.id === point.destination);
@@ -94,11 +100,11 @@ const createEditPointTemplate = ({ state, pointDestination, pointOffers, pointTy
                             <span class="visually-hidden">Choose event type</span>
                             <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
                         </label>
-                        <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
+                        <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox" ${(isDisabled) ? 'disabled' : ''}>
                         <div class="event__type-list">
                             <fieldset class="event__type-group">
                                 <legend class="visually-hidden">Event type</legend>
-                                ${createPointTypesTemplate(type)}
+                                ${createPointTypesTemplate({ type, isDisabled })}
                             </fieldset>
                         </div>
                     </div>
@@ -106,24 +112,24 @@ const createEditPointTemplate = ({ state, pointDestination, pointOffers, pointTy
                         <label class="event__label  event__type-output" for="event-destination-1">
                             ${type}
                         </label>
-                        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${currentDestination ? he.encode(currentDestination.name) : ''}" list="destination-list-1">
-                        ${createPointCitiesOptionsTemplate()}
+                        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${currentDestination ? he.encode(currentDestination.name) : ''}" list="destination-list-1" ${(isDisabled) ? 'disabled' : ''}>
+                        ${createPointCitiesOptionsTemplate(isDisabled)}
                     </div>
                     <div class="event__field-group  event__field-group--time">
-                    <label class="visually-hidden" for="event-start-time-1">From</label>
-                    <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${point.dateFrom ? formatStringToDateTime(dateFrom) : ''}">
-                    &mdash;
-                    <label class="visually-hidden" for="event-end-time-1">To</label>
-                    <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${point.dateTo ? formatStringToDateTime(dateTo) : ''}">
+                        <label class="visually-hidden" for="event-start-time-1">From</label>
+                        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${point.dateFrom ? formatStringToDateTime(dateFrom) : ''}" ${(isDisabled) ? 'disabled' : ''}>
+                        &mdash;
+                        <label class="visually-hidden" for="event-end-time-1">To</label>
+                        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${point.dateTo ? formatStringToDateTime(dateTo) : ''}" ${(isDisabled) ? 'disabled' : ''}>
                     </div>
                     <div class="event__field-group  event__field-group--price">
                         <label class="event__label" for="event-price-1">
                             <span class="visually-hidden">Price</span>
                             &euro;
                         </label>
-                        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value=${he.encode(basePrice.toString())}>
+                        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value=${he.encode(String(basePrice))} ${(isDisabled) ? 'disabled' : ''}>
                     </div>
-                    ${createPointEditControlsTemplate({ pointType })}
+                    ${createPointEditControlsTemplate({ pointType, isDisabled, isSaving, isDeleting })}
                 </header>
                 <section class="event__details">
                     ${(currentOffers.length !== 0) ? `<section class="event__section  event__section--offers">
@@ -332,7 +338,17 @@ export default class EditPointView extends AbstractStatefulView {
     )
   };
 
-  static parsePointToState = ({ point }) => ({ point });
+  static parsePointToState = ({
+    point,
+    isDisabled = false,
+    isSaving = false,
+    isDeleting = false
+  }) => ({
+    point,
+    isDisabled,
+    isSaving,
+    isDeleting
+  });
 
   static parseStateToPoint = (state) => state.point;
 }
