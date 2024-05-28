@@ -51,14 +51,31 @@ export default class NewPointPresenter {
     this.#handleDestroy({ isCanceled });
   };
 
+  setSaving = () => {
+    this.#pointNewComponent.updateElement({
+      isDisabled: true,
+      isSaving: true,
+    });
+  }
+
+  setAborting = () => {
+    const resetFormState = () => {
+      this.#pointNewComponent.updateElement({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    this.#pointNewComponent.shake(resetFormState);
+  }
+
   #formSubmitHandler = (point) => {
     this.#handleDataChange(
       UserAction.ADD_POINT,
       UpdateType.MINOR,
       point
     );
-
-    this.destroy({ isCanceled: false });
   };
 
   #resetButtonClickHandler = () => {
