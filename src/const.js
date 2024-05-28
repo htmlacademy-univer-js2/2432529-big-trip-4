@@ -98,13 +98,19 @@ const UserAction = {
 const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
-  MAJOR: 'MAJOR'
+  MAJOR: 'MAJOR',
+  INIT: 'INIT'
 };
 
 const EditType = {
   EDITING: 'EDITING',
   CREATING: 'CREATING'
-}
+};
+
+const Method = {
+  GET: 'GET',
+  PUT: 'PUT',
+};
 
 export {
   OFFER_COUNT,
@@ -123,5 +129,6 @@ export {
   EnabledSortType,
   UserAction,
   UpdateType,
-  EditType
+  EditType,
+  Method
 }
