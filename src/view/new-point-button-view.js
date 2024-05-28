@@ -1,10 +1,8 @@
-import AbstractView from "../framework/view/abstract-view.js";
+import AbstractView from '../framework/view/abstract-view.js';
 
-const createNewPointButtonTemplate = () => {
-  return (
-    '<button class="trip-main__event-add-btn  btn  btn--big  btn--yellow" type="button" >New event</button>'
-  );
-}
+const createNewPointButtonTemplate = () => (
+  '<button class="trip-main__event-add-btn  btn  btn--big  btn--yellow" type="button" >New event</button>'
+);
 
 export default class NewPointButtonView extends AbstractView {
   #handleClick = null;
@@ -22,10 +20,10 @@ export default class NewPointButtonView extends AbstractView {
 
   setDisabled = (isDisabled) => {
     this.element.disabled = isDisabled;
-  }
+  };
 
   #clickHandler = (evt) => {
     evt.preventDefault();
     this.#handleClick();
-  }
+  };
 }

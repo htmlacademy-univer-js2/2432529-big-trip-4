@@ -1,7 +1,7 @@
-import EditPointView from "../view/edit-point-view.js";
+import EditPointView from '../view/edit-point-view.js';
 
 import { remove, render, RenderPosition } from '../framework/render.js';
-import { UserAction, UpdateType, EditType } from "../const.js";
+import { UserAction, UpdateType, EditType } from '../const.js';
 
 export default class NewPointPresenter {
   #container = null;
@@ -20,10 +20,10 @@ export default class NewPointPresenter {
     this.#offersModel = offersModel;
     this.#handleDataChange = onDataChange;
     this.#handleDestroy = onDestroy;
-  };
+  }
 
   init() {
-    if (this.#pointNewComponent !== null) {
+    if (this.#pointNewComponent) {
       return;
     }
 
@@ -40,7 +40,7 @@ export default class NewPointPresenter {
   }
 
   destroy = ({ isCanceled = true } = {}) => {
-    if (this.#pointNewComponent === null) {
+    if (!this.#pointNewComponent) {
       return;
     }
 
@@ -56,7 +56,7 @@ export default class NewPointPresenter {
       isDisabled: true,
       isSaving: true,
     });
-  }
+  };
 
   setAborting = () => {
     const resetFormState = () => {
@@ -68,7 +68,7 @@ export default class NewPointPresenter {
     };
 
     this.#pointNewComponent.shake(resetFormState);
-  }
+  };
 
   #formSubmitHandler = (point) => {
     this.#handleDataChange(

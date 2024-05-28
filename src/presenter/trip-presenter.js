@@ -1,5 +1,5 @@
 import SortView from '../view/sort-view.js';
-import TripView from '../view/point-list-view.js';
+import PointListView from '../view/point-list-view.js';
 import MessageView from '../view/message-view.js';
 import LoadingView from '../view/loading-view.js';
 import PointPresenter from './point-presenter.js';
@@ -13,10 +13,10 @@ import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
 export default class TripPresenter {
   #tripContainer = null;
 
-  #pointListComponent = new TripView();
+  #pointListComponent = new PointListView();
   #sortComponent = null;
   #messageComponent = null;
-  #loadingComponent = new LoadingView();
+  #loadingComponent = null;
   #uiBlocker = new UiBlocker({
     lowerLimit: TimeLimit.LOWER_LIMIT,
     upperLimit: TimeLimit.UPPER_LIMIT
@@ -87,7 +87,7 @@ export default class TripPresenter {
     pointPresenter.init(point);
 
     this.#pointPresenters.set(point.id, pointPresenter);
-  }
+  };
 
   #renderPoints = () => {
     this.points.forEach((point) => {
@@ -95,7 +95,8 @@ export default class TripPresenter {
     });
   };
 
-  #renderLoading = () => {
+  #renderLoading = ({ isLoading, isLoadingError }) => {
+    this.#loadingComponent = new LoadingView({ isLoading, isLoadingError });
     render(this.#loadingComponent, this.#tripContainer, RenderPosition.AFTERBEGIN);
   };
 
@@ -103,7 +104,7 @@ export default class TripPresenter {
     this.#pointPresenters.forEach((presenter) => presenter.destroy());
     this.#pointPresenters.clear();
     this.#newPointPresenter.destroy();
-  }
+  };
 
   #renderSort = () => {
     const prevSortComponent = this.#sortComponent;
@@ -138,11 +139,13 @@ export default class TripPresenter {
 
   #renderPointContainer = () => {
     render(this.#pointListComponent, this.#tripContainer);
-  }
+  };
 
   #renderBoard = () => {
+    const isLoading = this.#isLoading;
+    const isLoadingError = this.#isLoadingError;
     if (this.#isLoading) {
-      this.#renderLoading();
+      this.#renderLoading({ isLoading, isLoadingError });
       this.#newPointButtonPresenter.disableButton();
       return;
     }
@@ -153,6 +156,7 @@ export default class TripPresenter {
       this.#clearBoard({ resetSortType: true });
       remove(this.#sortComponent);
       this.#sortComponent = null;
+      this.#renderLoading({ isLoading, isLoadingError });
       return;
     }
 
@@ -176,7 +180,7 @@ export default class TripPresenter {
     if (resetSortType) {
       this.#currentSortType = SortType.DAY;
     }
-  }
+  };
 
   #viewActionHandler = async (actionType, updateType, update) => {
     this.#uiBlocker.block();
@@ -224,6 +228,7 @@ export default class TripPresenter {
         break;
       case UpdateType.INIT:
         if (data.isError) {
+          this.#isLoading = false;
           this.#isLoadingError = true;
           this.#renderBoard();
           break;
@@ -241,14 +246,14 @@ export default class TripPresenter {
     this.#newPointPresenter.destroy();
   };
 
-  #newPointDestroyHandler = () => {
+  #newPointDestroyHandler = ({ isCanceled }) => {
     this.#isCreating = false;
     this.#newPointButtonPresenter.enableButton();
-    if (this.points.length === 0 && isCanceled) {
+    if (!this.points.length && isCanceled) {
       this.#clearBoard();
       this.#renderBoard();
     }
-  }
+  };
 
   #sortTypeChangeHandler = (sortType) => {
     this.#currentSortType = sortType;

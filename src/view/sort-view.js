@@ -1,9 +1,8 @@
 import AbstractView from '../framework/view/abstract-view.js';
 
 const createSortItemsTemplate = ({ items }) => {
-  const sortItems = items.map(sortItem => {
-    return (
-      `<div class="trip-sort__item  trip-sort__item--${sortItem.type}">
+  const sortItems = items.map((sortItem) => (
+    `<div class="trip-sort__item  trip-sort__item--${sortItem.type}">
             <input
               id="sort-${sortItem.type}"
               class="trip-sort__input  visually-hidden"
@@ -18,19 +17,16 @@ const createSortItemsTemplate = ({ items }) => {
               class="trip-sort__btn"
               for="sort-${sortItem.type}">${sortItem.type}</label>
           </div>`
-    )
-  }).join('');
+  )).join('');
 
   return sortItems;
-}
+};
 
-const createSortTemplate = ({ items }) => {
-  return (
-    `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
+const createSortTemplate = ({ items }) => (
+  `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
             ${createSortItemsTemplate({ items })}
         </form>`
-  );
-}
+);
 
 export default class SortView extends AbstractView {
   #items = null;
