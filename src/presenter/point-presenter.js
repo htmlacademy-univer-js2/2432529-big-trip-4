@@ -2,7 +2,7 @@ import PointView from '../view/point-view.js';
 import EditPointView from '../view/edit-point-view.js';
 import { remove, render, replace } from '../framework/render.js';
 import { Mode, UserAction, UpdateType } from '../const.js';
-import { isBigDifference } from '../utils.js';
+import { isBigDifference } from '../utils/point.js';
 
 export default class PointPresenter {
   #container = null;
@@ -47,7 +47,7 @@ export default class PointPresenter {
       onSubmitClick: this.#formSubmitHandler,
       onResetClick: this.#resetButtonClickHandler,
       onDeleteClick: this.#deleteButtonClickHandler
-    })
+    });
 
     if (!prevPointComponent || !prevEditPointComponent) {
       render(this.#pointComponent, this.#container);
@@ -114,10 +114,12 @@ export default class PointPresenter {
   };
 
   #replacePointToForm = () => {
-    replace(this.#editPointComponent, this.#pointComponent);
-    document.addEventListener('keydown', this.#escKeyDownHandler);
-    this.#handleModeChange();
-    this.#mode = Mode.EDITING;
+    if (!this.#editPointComponent._state.isSaving) {
+      replace(this.#editPointComponent, this.#pointComponent);
+      document.addEventListener('keydown', this.#escKeyDownHandler);
+      this.#handleModeChange();
+      this.#mode = Mode.EDITING;
+    }
   };
 
   #replaceFormToPoint = () => {
@@ -135,7 +137,7 @@ export default class PointPresenter {
   };
 
   #escKeyDownHandler = (evt) => {
-    if (evt.key === 'Escape') {
+    if (evt.key === 'Escape' && !this.#editPointComponent._state.isDisabled) {
       evt.preventDefault();
       this.#editPointComponent.reset(this.#point);
       this.#replaceFormToPoint();
@@ -157,20 +159,24 @@ export default class PointPresenter {
     );
   };
 
-  #formSubmitHandler = (updatedPoint) => {
+  #formSubmitHandler = async (updatedPoint) => {
     const isMinor = isBigDifference(updatedPoint, this.#point);
 
-    this.#handleDataChange(
+    await this.#handleDataChange(
       UserAction.UPDATE_POINT,
       isMinor ? UpdateType.MINOR : UpdateType.PATCH,
       updatedPoint
     );
 
-    this.#replaceFormToPoint();
+    if (!this.#editPointComponent._state.isDisabled) {
+      this.#replaceFormToPoint();
+    }
   };
 
   #resetButtonClickHandler = () => {
-    this.#editPointComponent.reset(this.#point);
-    this.#replaceFormToPoint();
-  }
+    if (!this.#editPointComponent._state.isDisabled || this.#editPointComponent._state.isSavingCompleted) {
+      this.#editPointComponent.reset(this.#point);
+      this.#replaceFormToPoint();
+    }
+  };
 }

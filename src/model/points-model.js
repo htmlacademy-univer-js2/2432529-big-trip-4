@@ -1,6 +1,6 @@
 import Observable from '../framework/observable.js';
 
-import { updateItem } from '../utils.js';
+import { updateItem } from '../utils/common.js';
 import { UpdateType } from '../const.js';
 import { adaptToClient, adaptToServer } from '../utils/point.js';
 

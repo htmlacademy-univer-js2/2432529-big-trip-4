@@ -1,26 +1,24 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { formatStringToDateTime, formatStringToShortDate, formatStringToTime, getPointDuration } from '../utils.js';
+import { formatStringToDateTime, formatStringToShortDate, formatStringToTime, getPointDuration } from '../utils/point.js';
 import he from 'he';
 
 const createPointOffersTemplate = ({ offersId, pointOffers }) => {
   const selectedOffers = pointOffers.filter((offer) => offersId.includes(offer.id));
 
-  if (selectedOffers.length === 0) {
+  if (!selectedOffers.length) {
     return '';
   }
 
-  const offerItems = selectedOffers.map(offer => {
-    return (
-      `<li class="event__offer">
+  const offerItems = selectedOffers.map((offer) => (
+    `<li class="event__offer">
                 <span class="event__offer-title">${offer.title}</span>
                 &plus;&euro;&nbsp;
                 <span class="event__offer-price">${offer.price}</span>
             </li>`
-    );
-  }).join('');
+  )).join('');
 
   return `<ul class="event__selected-offers">${offerItems}</ul>`;
-}
+};
 
 const createPointTemplate = ({ point, pointDestination, pointOffers }) => {
   const { basePrice, dateFrom, dateTo, isFavorite, type } = point;
@@ -59,7 +57,7 @@ const createPointTemplate = ({ point, pointDestination, pointOffers }) => {
             </div>
         </li>`
   );
-}
+};
 
 export default class PointView extends AbstractView {
   #point = null;
@@ -77,7 +75,7 @@ export default class PointView extends AbstractView {
     this.#onFavoriteClick = onFavoriteClick;
 
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
-    this.element.querySelector('.event__favorite-icon').addEventListener('click', this.#favoriteClickHandler);
+    this.element.querySelector('.event__favorite-btn').addEventListener('click', this.#favoriteClickHandler);
   }
 
   get template() {
@@ -90,11 +88,15 @@ export default class PointView extends AbstractView {
 
   #editClickHandler = (evt) => {
     evt.preventDefault();
-    this.#onEditClick();
-  }
+    const disabledResetButton = document.querySelector('.event__reset-btn[disabled]');
+    const disabledSavingButton = document.querySelector('.event__save-btn[disabled]');
+    if (!disabledResetButton && !disabledSavingButton) {
+      this.#onEditClick();
+    }
+  };
 
   #favoriteClickHandler = (evt) => {
     evt.preventDefault();
     this.#onFavoriteClick();
-  }
+  };
 }
