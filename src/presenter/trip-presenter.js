@@ -1,9 +1,10 @@
 import SortView from '../view/sort-view.js';
 import TripView from '../view/point-list-view.js';
 import MessageView from '../view/message-view.js';
+import LoadingView from '../view/loading-view.js';
 import PointPresenter from './point-presenter.js';
 import NewPointPresenter from './new-point-presenter.js';
-import { render, replace, remove } from '../framework/render.js';
+import { render, replace, remove, RenderPosition } from '../framework/render.js';
 import { SortType, EnabledSortType, UserAction, UpdateType, FilterType } from '../const.js';
 import { sort } from '../utils/sort.js';
 import { filter } from '../utils/filter.js';
@@ -14,6 +15,7 @@ export default class TripPresenter {
   #pointListComponent = new TripView();
   #sortComponent = null;
   #messageComponent = null;
+  #loadingComponent = new LoadingView();
 
   #destinationsModel = null;
   #offersModel = null;
@@ -26,6 +28,8 @@ export default class TripPresenter {
 
   #currentSortType = SortType.DAY;
   #isCreating = false;
+  #isLoading = true;
+  #isLoadingError = false;
 
   constructor({ tripContainer, destinationsModel, offersModel, pointsModel, filterModel, newPointButtonPresenter }) {
     this.#tripContainer = tripContainer;
@@ -86,6 +90,10 @@ export default class TripPresenter {
     });
   };
 
+  #renderLoading = () => {
+    render(this.#loadingComponent, this.#tripContainer, RenderPosition.AFTERBEGIN);
+  };
+
   #clearPoints = () => {
     this.#pointPresenters.forEach((presenter) => presenter.destroy());
     this.#pointPresenters.clear();
@@ -128,6 +136,18 @@ export default class TripPresenter {
   }
 
   #renderBoard = () => {
+    if (this.#isLoading) {
+      this.#renderLoading();
+      return;
+    }
+
+    if (this.#isLoadingError) {
+      this.#clearBoard({ resetSortType: true });
+      remove(this.#sortComponent);
+      this.#sortComponent = null;
+      return;
+    }
+
     if (this.points.length === 0 && !this.#isCreating) {
       this.#renderMessage();
       return;
@@ -143,6 +163,7 @@ export default class TripPresenter {
     remove(this.#messageComponent);
     remove(this.#sortComponent);
     this.#sortComponent = null;
+    remove(this.#loadingComponent);
 
     if (resetSortType) {
       this.#currentSortType = SortType.DAY;
@@ -176,6 +197,17 @@ export default class TripPresenter {
         this.#clearBoard({ resetSortType: true });
         this.#renderBoard();
         break;
+      case UpdateType.INIT:
+        if (data.isError) {
+          this.#isLoadingError = true;
+          this.#renderBoard();
+          break;
+        } else {
+          this.#isLoading = false;
+          remove(this.#loadingComponent);
+          this.#renderBoard();
+          break;
+        }
     }
   };
 
