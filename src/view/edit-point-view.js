@@ -48,8 +48,8 @@ const createPointPhotosTemplate = (pointDestination) => (
   (pointDestination.pictures && pointDestination.pictures.length) ?
     `<div class="event__photos-tape">
       ${pointDestination.pictures.map((picture) =>
-      `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`
-    ).join('')}
+    `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`
+  ).join('')}
   </div>`
     : ''
 );
